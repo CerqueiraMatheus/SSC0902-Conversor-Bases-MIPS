@@ -5,7 +5,7 @@
 .globl maiusculo
 maiusculo:
 	# empilha
-	addi $sp, $sp, -4
+	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	
 enquanto_maiusculo:				# enquanto *string != '\0' faça
@@ -21,6 +21,37 @@ inc_maiusculo:					#
 	j enquanto_maiusculo			# fim enquanto
 
 returno_maiusculo:
+	# desempilha
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	
+	jr $ra
+
+
+# busca por um caracter dentro da string
+#  $a0 - string
+#  $a1 - caracter
+#  $v0 - índice do caracter ou -1 caso não encontrado
+.globl busca
+busca:
+	# empilha
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	
+	li $v0, 0				# indice <- 0
+	
+enquanto_busca:					# enquanto *string != '\0' faça
+	lb $t0, ($a0)				# 	caracter <- *string
+	beq $t0, '\0', falha_busca		#	
+	beq $t0, $a1, retorno_busca		# 	se caracter == desejado então retorna indice
+	addi $v0, $v0, 1			#	indice++
+	addi $a0, $a0, 1			#	próximo(string)
+	j enquanto_busca			# fim enquanto
+
+falha_busca:					# se desejado não encontrado então
+	li $v0, -1				# 	retorna -1
+
+retorno_busca:
 	# desempilha
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4

@@ -4,7 +4,7 @@
 	msg_numero: .asciiz "Digite o numero a ser convertido:\n"
 	
 	opcoes: .asciiz "[1] Binario\n[2] Decimal\n[3] Hexadecimal\n"
-	msg_base_entrada: .asciiz "Selecione a base da entreda:\n"
+	msg_base_entrada: .asciiz "Selecione a base da entrada:\n"
 	msg_base_saida: .asciiz "Selecione a base da saida:\n"
 
 .text
@@ -49,12 +49,8 @@ main:
 	syscall
 	move $s1, $v0
 	
-	la $a0, numero
-	jal maiusculo
 	
-	li $v0, 4
-	la $a0, numero
-	syscall
 	
+	# fim execução
 	li $v0, 10
 	syscall
