@@ -32,7 +32,7 @@ enquanto_checa:					# enquanto *número != '\0' e *número != '\n' faça
 	beq $v0, -1, retorno_checa		# 	fim se
 	move $v0, $s0				#	endereço <- número
 	addi $s0, $s0, 1			#	próximo(número)
-	j enquanto_checa			# fim enquanto
+	b enquanto_checa			# fim enquanto
 
 retorno_checa:
 	# desempilha

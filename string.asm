@@ -19,7 +19,7 @@ enquanto_maiusculo:				# enquanto *string != '\0' faça
 						#	fim se
 inc_maiusculo:					#
 	addi $a0, $a0, 1			# próximo(string)
-	j enquanto_maiusculo			# fim enquanto
+	b enquanto_maiusculo			# fim enquanto
 
 returno_maiusculo:
 	# desempilha
@@ -49,7 +49,7 @@ enquanto_busca:					# enquanto *string != '\0' faça
 	beq $t0, $a1, retorno_busca		# 	se caracter == desejado então retorna índice
 	addi $v0, $v0, 1			#	índice++
 	addi $a0, $a0, 1			#	próximo(string)
-	j enquanto_busca			# fim enquanto
+	b enquanto_busca			# fim enquanto
 						#
 falha_busca:					#
 	li $v0, -1				# retorna -1
