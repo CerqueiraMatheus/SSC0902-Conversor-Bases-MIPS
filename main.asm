@@ -1,11 +1,11 @@
 .data
 .align 0
-	opcoes: .asciiz "[1] Binario\n[2] Decimal\n[3] Hexadecimal\n"
-	mensagem_entrada: .asciiz "Digite o numero a ser convertido:\n"
-	mensagem_base_entrada: .asciiz "Selecione a base da entreda:\n"
-	mensagem_base_saida: .asciiz "Selecione a base da saida:\n"
-	
 	numero: .space 34
+	msg_numero: .asciiz "Digite o numero a ser convertido:\n"
+	
+	opcoes: .asciiz "[1] Binario\n[2] Decimal\n[3] Hexadecimal\n"
+	msg_base_entrada: .asciiz "Selecione a base da entreda:\n"
+	msg_base_saida: .asciiz "Selecione a base da saida:\n"
 
 .text
 
@@ -13,44 +13,44 @@
 # $s1 - base_saida
 .globl main
 main:
-	# Imprime string mensagem_entrada
+	# imprime msg_numero
 	li $v0, 4
-	la $a0, mensagem_entrada
+	la $a0, msg_numero
 	syscall
-	# Lê numero
+	# lê numero
 	li $v0, 8
 	la $a0, numero
 	li $a1, 34
 	syscall
 
-	# Imprime string mensagem_base_entrada
+	# imprime msg_base_entrada
 	li $v0, 4
-	la $a0, mensagem_base_entrada
+	la $a0, msg_base_entrada
 	syscall
-	# Imprime string opcoes
+	# imprime opcoes
 	li $v0, 4
 	la $a0, opcoes
 	syscall
-	# Lê base_entrada
+	# lê base_entrada
 	li $v0, 5
 	syscall
 	move $s0, $v0
 	
-	# Imprime string mensagem_base_saida
+	# imprime msg_base_saida
 	li $v0, 4
-	la $a0, mensagem_base_saida
+	la $a0, msg_base_saida
 	syscall
-	# Imprime string opcoes
+	# imprime opcoes
 	li $v0, 4
 	la $a0, opcoes
 	syscall
-	# Lê base_saida
+	# lê base_saida
 	li $v0, 5
 	syscall
 	move $s1, $v0
 	
 	la $a0, numero
-	jal toupper
+	jal maiusculo
 	
 	li $v0, 4
 	la $a0, numero
