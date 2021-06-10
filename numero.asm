@@ -5,41 +5,46 @@
 #  $a0 - número
 #  $a1 - digitos
 # Retorno:
-#  $v0 - endereço do bit menos significativo ou -1 caso inválido
+#  $v0 - deslocamento ou -1 caso inválido
 # Registradores:
-#  $s0 - número
-#  $s1 - digitos
+#  $s0 - digitos
+#  $s1 - número
+#  $s2 - deslocamento + 1
 .globl valida
 valida:
 	# empilha
-	subi $sp, $sp, 12
-	sw $s0, 8($sp)
-	sw $s1, 4($sp)
+	subi $sp, $sp, 16
+	sw $s0, 12($sp)
+	sw $s1, 8($sp)
+	sw $s2, 4($sp)
 	sw $ra, 0($sp)
 
 	# salva strings
-	move $s0, $a0
-	move $s1, $a1
+	move $s0, $a1
+	move $s1, $a0
 	
-	li $v0, -1				# endereço <- -1
+	li $s2, 0				#
+	li $v0, -1				# deslocamento <- -1
 						#
-enquanto_valida:					# enquanto *número != '\0' e *número != '\n' faça
-	lb $a1, ($s0)				# 	digito <- *numero
+enquanto_valida:				# enquanto *número != '\0' e *número != '\n' faça
+	lb $a1, ($s1)				# 	digito <- *numero
 	beq $a1, '\0', retorno_valida		#
 	beq $a1, '\n', retorno_valida		#
-	move $a0, $s1				# 	se busca(digitos, digito) == -1 então
+	move $a0, $s0				# 	se busca(digitos, digito) == -1 então
 	jal busca				#		retorna -1
 	beq $v0, -1, retorno_valida		# 	fim se
-	move $v0, $s0				#	endereço <- número
-	addi $s0, $s0, 1			#	próximo(número)
+	move $v0, $s2				#	deslocamento++
+	addi $s2, $s2, 1			#
+	addi $s1, $s1, 1			#	próximo(número)
 	j enquanto_valida			# fim enquanto
 
 retorno_valida:
 	# desempilha
-	lw $s0, 8($sp)
-	lw $s1, 4($sp)
+	lw $s0, 12($sp)
+	lw $s1, 8($sp)
+	lw $s2, 4($sp)
 	lw $ra, 0($sp)
-	addi $sp, $sp, 12
+	addi $sp, $sp, 16
 	
 	jr $ra
 

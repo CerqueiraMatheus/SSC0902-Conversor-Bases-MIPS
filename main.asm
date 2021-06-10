@@ -48,8 +48,8 @@ binario:
 	bne $s0, 1, decimal				# se base_entrada == 1 então
 	la $a0, numero					# 	
 	la $a1, dig_binario				#
-	jal valida					#	tamanho <- valida(número, dig_binário)
-	beq $v0, -1, numero_invalido			# 	se tamanho == -1 então imprime "Numero invalido!"
+	jal valida					#	deslocamento <- valida(número, dig_binário)
+	beq $v0, -1, numero_invalido			# 	se deslocamento == -1 então imprime "Numero invalido!"
 	binario_binario:				#
 		bne $s1, 1, binario_decimal		# 	se base_saída == 1 então
 		jal imprime_numero			# 		imprime número
@@ -58,26 +58,26 @@ binario:
 		bne $s1, 2, binario_hexadecimal		# 	senão se base_saída == 2 então
 		la $a0, numero				#
 		move $a1, $v0				#
-		jal binario_para_decimal		# 		binário_para_decimal(número, tamanho)
+		jal binario_para_decimal		# 		binário_para_decimal(número, deslocamento)
 		j retorno				#
 	binario_hexadecimal:				#
 		bne $s1, 3, opcao_invalida		# 	senão se base_saída == 3 então
 		la $a0, numero				#
 		move $a1, $v0				#
-		jal binario_para_hexadecimal		# 		binário_para_hexadecimal(número, tamanho)
+		jal binario_para_hexadecimal		# 		binário_para_hexadecimal(número, deslocamento)
 		j retorno				# 	senão imprime "Opcao invalida!"
 							# 	fim se
 decimal:
 	bne $s0, 2, hexadecimal				# senão se base_entrada == 2 então
 	la $a0, numero					# 	
 	la $a1, dig_decimal				#
-	jal valida					#	tamanho <- valida(número, dig_binário)
-	beq $v0, -1, numero_invalido			# 	se tamanho == -1 então imprime "Numero invalido!"
+	jal valida					#	deslocamento <- valida(número, dig_binário)
+	beq $v0, -1, numero_invalido			# 	se deslocamento == -1 então imprime "Numero invalido!"
 	decimal_binario:				#
 		bne $s1, 1, decimal_decimal		#	se base_saída == 1 então
 		la $a0, numero				#
 		move $a1, $v0				#
-		jal decimal_para_binario		# 		decimal_para_binário(número, tamanho)
+		jal decimal_para_binario		# 		decimal_para_binário(número, deslocamento)
 		j retorno				#
 	decimal_decimal:				# 	senão se base_saída == 2 então
 		bne $s1, 2, decimal_hexadecimal		#
@@ -87,7 +87,7 @@ decimal:
 		bne $s1, 3, opcao_invalida		# 	senão se base_saída == 3 então
 		la $a0, numero				#
 		move $a1, $v0				#
-		jal decimal_para_hexadecimal		# 		decimal_para_hexadecimal(número, tamanho)
+		jal decimal_para_hexadecimal		# 		decimal_para_hexadecimal(número, deslocamento)
 		j retorno				# 	senão imprime "Opcao invalida!"
 							# 	fim se
 hexadecimal:
@@ -96,19 +96,19 @@ hexadecimal:
 	jal maiusculo					# 	maiúsculo(número)
 	la $a0, numero					# 	
 	la $a1, dig_hexadecimal				#
-	jal valida					#	tamanho <- valida(número, dig_binário)
-	beq $v0, -1, numero_invalido			# 	se tamanho == -1 então imprime "Numero invalido!"
+	jal valida					#	deslocamento <- valida(número, dig_binário)
+	beq $v0, -1, numero_invalido			# 	se deslocamento == -1 então imprime "Numero invalido!"
 	hexadecimal_binario:				#
 		bne $s1, 1, hexadecimal_decimal		# 	se base_saída == 1 então
 		la $a0, numero				#
 		move $a1, $v0				#
-		jal hexadecimal_para_binario		# 		hexadecimal_para_binário(número, tamanho)
+		jal hexadecimal_para_binario		# 		hexadecimal_para_binário(número, deslocamento)
 		j retorno				#
 	hexadecimal_decimal:				#
 		bne $s1, 2, hexadecimal_hexadecimal	# 	senão se base_saída == 2 então
 		la $a0, numero				#
 		move $a1, $v0				#
-		jal hexadecimal_para_decimal		# 		hexadecimal_para_decimal(número, tamanho)
+		jal hexadecimal_para_decimal		# 		hexadecimal_para_decimal(número, deslocamento)
 		j retorno				#
 	hexadecimal_hexadecimal:			# 	senão se base_saída == 3 então
 		bne $s1, 3, opcao_invalida		#
