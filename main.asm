@@ -49,7 +49,12 @@ main:
 	syscall
 	move $s1, $v0
 	
+	la $a0, numero
+	jal toupper
 	
+	li $v0, 4
+	la $a0, numero
+	syscall
 	
 	li $v0, 10
 	syscall
