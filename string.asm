@@ -30,8 +30,8 @@ returno_maiusculo:
 
 # busca por um caracter dentro da string
 #  $a0 - string
-#  $a1 - caracter
-#  $v0 - índice do caracter ou -1 caso não encontrado
+#  $a1 - desejado
+#  $v0 - indice ou -1 caso não encontrado
 .globl busca
 busca:
 	# empilha
