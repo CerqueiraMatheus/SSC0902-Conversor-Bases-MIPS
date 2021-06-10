@@ -121,12 +121,11 @@ opcao_invalida:
 	syscall						# 	imprime "Opcao invalida!\n"
 	j retorno					# fim se
 
-# imprime "Numero invalido!\n"
 numero_invalido:
-	li $v0, 4
-	la $a0, msg_numero_invalido
-	syscall
-	j retorno
+	li $v0, 4					#
+	la $a0, msg_numero_invalido			#
+	syscall						# imprime "Numero invalido!\n"
+	j retorno					#
 	
 retorno:
 	li $v0, 10
