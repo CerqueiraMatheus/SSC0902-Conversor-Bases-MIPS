@@ -39,7 +39,7 @@ busca:
 	sw $ra, 0($sp)
 	
 	li $v0, 0				# indice <- 0
-	
+						#
 enquanto_busca:					# enquanto *string != '\0' faça
 	lb $t0, ($a0)				# 	caracter <- *string
 	beq $t0, '\0', falha_busca		#	
@@ -47,9 +47,9 @@ enquanto_busca:					# enquanto *string != '\0' faça
 	addi $v0, $v0, 1			#	indice++
 	addi $a0, $a0, 1			#	próximo(string)
 	j enquanto_busca			# fim enquanto
-
-falha_busca:					# se desejado não encontrado então
-	li $v0, -1				# 	retorna -1
+						#
+falha_busca:					#
+	li $v0, -1				# retorna -1
 
 retorno_busca:
 	# desempilha
