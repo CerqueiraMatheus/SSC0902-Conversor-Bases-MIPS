@@ -6,11 +6,16 @@
 	opcoes: .asciiz "[1] Binario\n[2] Decimal\n[3] Hexadecimal\n"
 	msg_base_entrada: .asciiz "Selecione a base da entrada:\n"
 	msg_base_saida: .asciiz "Selecione a base da saida:\n"
+	
+	dig_binario: .asciiz "01"
+	dig_decimal: .asciiz "0123456789"
+	dig_hexadecimal: .asciiz "0123456789ABCDEF"
 
 .text
 
-# $s0 - base_entrada
-# $s1 - base_saida
+# Registradores:
+#  $s0 - base_entrada
+#  $s1 - base_saida
 .globl main
 main:
 	# imprime msg_numero
@@ -49,8 +54,17 @@ main:
 	syscall
 	move $s1, $v0
 	
+	la $a0, numero
+	jal maiusculo
 	
+	la $a0, numero
+	la $a1, dig_hexadecimal
+	jal checa
 	
-	# fim execução
+	move $a0, $v0
+	li $v0, 1
+	syscall
+	
+retorno:
 	li $v0, 10
 	syscall
