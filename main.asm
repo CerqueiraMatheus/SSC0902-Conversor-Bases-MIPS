@@ -93,7 +93,7 @@ decimal:
 hexadecimal:
 	bne $s0, 3, opcao_invalida			# senão se base_entrada == 3 então
 	la $a0, numero					#
-	jal maiusculo					# 	maiusculo(número)
+	jal maiusculo					# 	maiúsculo(número)
 	la $a0, numero					# 	
 	la $a1, dig_hexadecimal				#
 	jal valida					#	tamanho <- valida(número, dig_binário)
