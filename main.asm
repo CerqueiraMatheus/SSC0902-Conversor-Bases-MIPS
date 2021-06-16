@@ -1,166 +1,65 @@
 .data
 .align 0
 	numero: .space 34
+	
+	msg_base_entrada: .asciiz "Selecione a base do numero de entrada:\n"
+	msg_base_saida: .asciiz "Selecione a base do numero de saida:\n"
 	msg_numero: .asciiz "Digite o numero a ser convertido:\n"
 	msg_numero_invalido: .asciiz "Numero invalido!\n"
-	
-	opcoes: .asciiz "[1] Binario\n[2] Decimal\n[3] Hexadecimal\n"
-	msg_base_entrada: .asciiz "Selecione a base da entrada:\n"
-	msg_base_saida: .asciiz "Selecione a base da saida:\n"
-	msg_opcao_invalida: .asciiz "Opcao invalida!\n"
-	
-	dig_binario: .asciiz "01"
-	dig_decimal: .asciiz "0123456789"
-	dig_hexadecimal: .asciiz "0123456789ABCDEF"
+	msg_convertido: .asciiz "Numero convertido:\n"
 
 .text
 
 # Registradores:
-#  $s0 - base_entrada
-#  $s1 - base_saida
+#  $s0 - base da entrada
+#  $s1 - base da saída
+#  $s2 - convertido
 .globl main
 main:
-	li $v0, 4					#
-	la $a0, msg_numero				#
-	syscall						# imprime "Digite o numero a ser convertido:\n"
-	li $v0, 8					#
-	la $a0, numero					#
-	li $a1, 34					#
-	syscall						# número <- input
-
-	li $v0, 4					#
-	la $a0, msg_base_entrada			#
-	syscall						# imprime "Selecione a base da entrada:\n"
-	jal imprime_opcoes				# imprime_opções
-	li $v0, 5					#
-	syscall						#
-	move $s0, $v0					# base_entrada <- input
+	la $a0, msg_base_entrada		#
+	jal imprime_string			# imprime_string(mensagem base da entrada)
+	jal le_opcao				# opção <- le_opcao()
+	move $a0, $v0				#
+	jal para_base				# base da entrada <- para_base(opção)
+	move $s0, $v0				#
 	
-	li $v0, 4					#
-	la $a0, msg_base_saida				# 
-	syscall						# imprime "Selecione a base da saida:\n"
-	jal imprime_opcoes				# imprime opções
-	li $v0, 5					#
-	syscall						#
-	move $s1, $v0					# base_saída <- input
-
-binario:
-	bne $s0, 1, decimal				# se base_entrada == 1 então
-	la $a0, numero					# 	
-	la $a1, dig_binario				#
-	jal valida					#	deslocamento <- valida(número, dig_binário)
-	beq $v0, -1, numero_invalido			# 	se deslocamento == -1 então imprime "Numero invalido!"
-	binario_binario:				#
-		bne $s1, 1, binario_decimal		# 	se base_saída == 1 então
-		jal imprime_numero			# 		imprime número
-		j retorno				#
-	binario_decimal:				#
-		bne $s1, 2, binario_hexadecimal		# 	senão se base_saída == 2 então
-		la $a0, numero				#
-		move $a1, $v0				#
-		jal binario_para_decimal		# 		binário_para_decimal(número, deslocamento)
-		j retorno				#
-	binario_hexadecimal:				#
-		bne $s1, 3, opcao_invalida		# 	senão se base_saída == 3 então
-		la $a0, numero				#
-		move $a1, $v0				#
-		jal binario_para_hexadecimal		# 		binário_para_hexadecimal(número, deslocamento)
-		j retorno				# 	senão imprime "Opcao invalida!"
-							# 	fim se
-decimal:
-	bne $s0, 2, hexadecimal				# senão se base_entrada == 2 então
-	la $a0, numero					# 	
-	la $a1, dig_decimal				#
-	jal valida					#	deslocamento <- valida(número, dig_binário)
-	beq $v0, -1, numero_invalido			# 	se deslocamento == -1 então imprime "Numero invalido!"
-	decimal_binario:				#
-		bne $s1, 1, decimal_decimal		#	se base_saída == 1 então
-		la $a0, numero				#
-		move $a1, $v0				#
-		jal decimal_para_binario		# 		decimal_para_binário(número, deslocamento)
-		j retorno				#
-	decimal_decimal:				# 	senão se base_saída == 2 então
-		bne $s1, 2, decimal_hexadecimal		#
-		jal imprime_numero			# 		imprime número
-		j retorno				#
-	decimal_hexadecimal:				#
-		bne $s1, 3, opcao_invalida		# 	senão se base_saída == 3 então
-		la $a0, numero				#
-		move $a1, $v0				#
-		jal decimal_para_hexadecimal		# 		decimal_para_hexadecimal(número, deslocamento)
-		j retorno				# 	senão imprime "Opcao invalida!"
-							# 	fim se
-hexadecimal:
-	bne $s0, 3, opcao_invalida			# senão se base_entrada == 3 então
-	la $a0, numero					#
-	jal maiusculo					# 	maiúsculo(número)
-	la $a0, numero					# 	
-	la $a1, dig_hexadecimal				#
-	jal valida					#	deslocamento <- valida(número, dig_binário)
-	beq $v0, -1, numero_invalido			# 	se deslocamento == -1 então imprime "Numero invalido!"
-	hexadecimal_binario:				#
-		bne $s1, 1, hexadecimal_decimal		# 	se base_saída == 1 então
-		la $a0, numero				#
-		move $a1, $v0				#
-		jal hexadecimal_para_binario		# 		hexadecimal_para_binário(número, deslocamento)
-		j retorno				#
-	hexadecimal_decimal:				#
-		bne $s1, 2, hexadecimal_hexadecimal	# 	senão se base_saída == 2 então
-		la $a0, numero				#
-		move $a1, $v0				#
-		jal hexadecimal_para_decimal		# 		hexadecimal_para_decimal(número, deslocamento)
-		j retorno				#
-	hexadecimal_hexadecimal:			# 	senão se base_saída == 3 então
-		bne $s1, 3, opcao_invalida		#
-		jal imprime_numero			# 		imprime número
-		j retorno				# 	senão imprime "Opcao invalida!"
-							# 	fim se
-opcao_invalida:
-	li $v0, 4					# senão
-	la $a0, msg_opcao_invalida			#
-	syscall						# 	imprime "Opcao invalida!\n"
-	j retorno					# fim se
+	la $a0, msg_numero			#
+	jal imprime_string			# imprime_string(mensagem número)
+	li $v0, 8				#
+	la $a0, numero				#
+	li $a1, 34				#
+	syscall					# número <- entrada()
+	
+	la $a0, msg_base_saida			#
+	jal imprime_string			# imprime_string(mensagem base da saída)
+	jal le_opcao				# opção <- le_opcao()
+	move $a0, $v0				#
+	jal para_base				# base da saída <- para_base(opção)
+	move $s1, $v0				#
+	
+	la $a0, numero				#
+	jal maiusculo				# maiusculo(número)
+	la $a0, numero				#
+	move $a1, $s0				#
+	jal valida				# válido <- valida(número, base da entrada)
+	beqz $v0, numero_invalido		# se válido = 0 então imprime_string(mensagem número inválido) senão
+	la $a0, numero				#
+	move $a1, $s0				#
+	jal para_decimal			# decimal <- para_decimal(número, base da entrada)
+	move $a0, $v0				#
+	move $a1, $s1				#
+	jal decimal_para			# convertido <- decimal_para(decimal, base da saída)
+	move $s2, $v0				#
+	la $a0, msg_convertido			#
+	jal imprime_string			# imprime_string(mensagem convertido)
+	move $a0, $s2				#
+	jal imprime_string			# imprime_string(convertido)
+	j saida					#
 
 numero_invalido:
-	li $v0, 4					#
-	la $a0, msg_numero_invalido			#
-	syscall						# imprime "Numero invalido!\n"
-	j retorno					#
-	
-retorno:
+	la $a0, msg_numero_invalido
+	jal imprime_string
+
+saida:	
 	li $v0, 10
 	syscall
-
-
-# Imprime as opções de base
-imprime_opcoes:
-	# empilha
-	subi $sp, $sp, 4
-	sw $ra, 0($sp)
-	
-	li $v0, 4
-	la $a0, opcoes
-	syscall
-	
-	# desempilha
-	lw $ra, 0($sp)
-	addi $sp, $sp, 4
-	
-	jr $ra
-
-
-# Imprime o número
-imprime_numero:
-	# empilha
-	subi $sp, $sp, 4
-	sw $ra, 0($sp)
-	
-	li $v0, 4
-	la $a0, numero
-	syscall
-	
-	# desempilha
-	lw $ra, 0($sp)
-	addi $sp, $sp, 4
-	
-	jr $ra

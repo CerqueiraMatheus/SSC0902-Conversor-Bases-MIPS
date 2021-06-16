@@ -33,9 +33,9 @@ le_opcao:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	
-	la $a0, opcoes
-	jal imprime_string
-
+	la $a0, opcoes				#
+	jal imprime_string			# imrpime_string(opções)
+						#
 repita_le_opcao:				# repita
 	li $v0, 12				#
 	syscall					# 	caracter <- entrada()
@@ -43,7 +43,7 @@ repita_le_opcao:				# repita
 	beq $v0, 'D', retorno_le_opcao		# 		retorna caracter
 	beq $v0, 'H', retorno_le_opcao		# 	fim se
 	la $a0, opcao_invalida			#
-	jal imprime_string			# 	imprime_string("Opcao invalida!")
+	jal imprime_string			# 	imprime_string(opção inválida)
 	j repita_le_opcao			# fim repita
 
 retorno_le_opcao:
@@ -72,19 +72,19 @@ para_base:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 
-binario_para_base:
-	bne $a0, 'B', decimal_para_base
-	li $v0, 2
-	j retorno_para_base
-
-decimal_para_base:
-	bne $a0, 'D', hexadecimal_para_base
-	li $v0, 10
-	j retorno_para_base
-
-hexadecimal_para_base:
-	li $v0, 16
-
+binario_para_base:				# se opção = 'B' então
+	bne $a0, 'B', decimal_para_base		#
+	li $v0, 2				# 	retorna 2
+	j retorno_para_base			#
+						#
+decimal_para_base:				# senão se opção = 'D' então
+	bne $a0, 'D', hexadecimal_para_base	#
+	li $v0, 10				# 	retorna 10
+	j retorno_para_base			#
+						#
+hexadecimal_para_base:				# senão
+	li $v0, 16				# 	retorna 16
+						# fim se
 retorno_para_base:
 	# desempilha
 	lw $ra, 0($sp)

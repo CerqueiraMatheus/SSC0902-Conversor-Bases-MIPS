@@ -1,7 +1,7 @@
 .data
 .align 0
-	digitos: .asciiz "0123456789ABCDEF"
 	convertido: .space 33
+	digitos: .asciiz "0123456789ABCDEF"
 
 .text
 
@@ -150,21 +150,3 @@ retorno_decimal_para:
 	addi $sp, $sp, 4
 	
 	jr $ra
-
-.globl binario_para_decimal
-binario_para_decimal:
-
-.globl binario_para_hexadecimal
-binario_para_hexadecimal:
-
-.globl decimal_para_binario
-decimal_para_binario:
-
-.globl decimal_para_hexadecimal
-decimal_para_hexadecimal:
-
-.globl hexadecimal_para_binario
-hexadecimal_para_binario:
-
-.globl hexadecimal_para_decimal
-hexadecimal_para_decimal:
