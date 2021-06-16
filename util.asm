@@ -47,6 +47,13 @@ repita_le_opcao:				# repita
 	j repita_le_opcao			# fim repita
 
 retorno_le_opcao:
+	# pula linha
+	move $t0, $v0
+	li $v0, 11
+	li $a0, '\n'
+	syscall
+	move $v0, $t0
+
 	# desempilha
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
