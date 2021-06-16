@@ -1,34 +1,5 @@
 .text
 
-# Converte a string para maiúsculo
-# Argumentos:
-#  $a0 - string
-.globl maiusculo
-maiusculo:
-	# empilha
-	subi $sp, $sp, 4
-	sw $ra, 0($sp)
-	
-enquanto_maiusculo:				# enquanto *string != '\0' faça
-	lb $t0, ($a0)				# 	caracter <- *string
-	beq $t0, '\0', returno_maiusculo	#
-	blt $t0, 'a', inc_maiusculo		# 	se 'a' <= caracter <= 'z' então
-	bgt $t0, 'z', inc_maiusculo		#
-	subi $t0, $t0, 32			#		caracter -= 32
-	sb $t0, ($a0)				#		*string <- caracter
-						#	fim se
-inc_maiusculo:					#
-	addi $a0, $a0, 1			# próximo(string)
-	j enquanto_maiusculo			# fim enquanto
-
-returno_maiusculo:
-	# desempilha
-	lw $ra, 0($sp)
-	addi $sp, $sp, 4
-	
-	jr $ra
-
-
 # Busca por um caracter desejado dentro da string
 # Argumentos:
 #  $a0 - string
@@ -58,6 +29,68 @@ falha_busca:					#
 	li $v0, -1				# retorna -1
 
 retorno_busca:
+	# desempilha
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	
+	jr $ra
+
+
+# Converte a string para maiúsculo
+# Argumentos:
+#  $a0 - string
+.globl maiusculo
+maiusculo:
+	# empilha
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	
+enquanto_maiusculo:				# enquanto *string != '\0' faça
+	lb $t0, ($a0)				# 	caracter <- *string
+	beq $t0, '\0', returno_maiusculo	#
+	blt $t0, 'a', inc_maiusculo		# 	se 'a' <= caracter <= 'z' então
+	bgt $t0, 'z', inc_maiusculo		#
+	subi $t0, $t0, 32			#		caracter -= 32
+	sb $t0, ($a0)				#		*string <- caracter
+						#	fim se
+inc_maiusculo:					#
+	addi $a0, $a0, 1			# 	próximo(string)
+	j enquanto_maiusculo			# fim enquanto
+
+returno_maiusculo:
+	# desempilha
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	
+	jr $ra
+
+
+# Inverte os caracteres da string
+# Argumentos:
+#  $a0 - string
+#  $a1 - tamanho
+.globl inverte
+inverte:
+	# emipilha
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	
+	li $t0, 0				# início <- 0
+	subi $t1, $a1, 1			# fim <- tamanho - 1
+						#
+enquanto_inverte:				# enquanto início < fim faça
+	bge $t0, $t1, retorno_inverte		#
+	add $t2, $a0, $t0			#
+	add $t3, $a0, $t1			#
+	lb $t4, ($t2)				#
+	lb $t5, ($t3)				#
+	sb $t5, ($t2)				# 	string[início] <- string[fim]
+	sb $t4, ($t3)				# 	string[fim] <- string[início]
+	addi $t0, $t0, 1			# 	início++
+	subi $t1, $t1, 1			# 	fim--
+	j enquanto_inverte			# fim enquanto
+	
+retorno_inverte:
 	# desempilha
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
