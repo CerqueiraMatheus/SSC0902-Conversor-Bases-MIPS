@@ -48,12 +48,12 @@ maiusculo:
 enquanto_maiusculo:				# enquanto *string != '\0' faça
 	lb $t0, ($a0)				# 	caracter <- *string
 	beq $t0, '\0', returno_maiusculo	#
-	blt $t0, 'a', inc_maiusculo		# 	se 'a' <= caracter <= 'z' então
-	bgt $t0, 'z', inc_maiusculo		#
+	blt $t0, 'a', continua_maiusculo	# 	se 'a' <= caracter <= 'z' então
+	bgt $t0, 'z', continua_maiusculo	#
 	subi $t0, $t0, 32			#		caracter -= 32
 	sb $t0, ($a0)				#		*string <- caracter
 						#	fim se
-inc_maiusculo:					#
+continua_maiusculo:				#
 	addi $a0, $a0, 1			# 	próximo(string)
 	j enquanto_maiusculo			# fim enquanto
 
