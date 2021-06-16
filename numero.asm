@@ -59,17 +59,20 @@ retorno_valida:
 #  $a1 - base
 # Retorno:
 #  $v0 - decimal
+#  $v1 - 1 se houve overflow e 0 se não
 # Registradores:
 #  $s0 - número
 #  $s1 - base
 #  $s2 - decimal
+#  $s3 - overflow
 .globl para_decimal
 para_decimal:
 	# empilha
-	subi $sp, $sp, 16
-	sw $s0, 12($sp)
-	sw $s1, 8($sp)
-	sw $s2, 4($sp)
+	subi $sp, $sp, 20
+	sw $s0, 16($sp)
+	sw $s1, 12($sp)
+	sw $s2, 8($sp)
+	sw $s3, 4($sp)
 	sw $ra, 0($sp)
 	
 	# salva número e base
@@ -77,28 +80,39 @@ para_decimal:
 	move $s1, $a1
 	
 	li $s2, 0				# decimal <- 0
+	li $s3, 0				# overflow <- 0
 						#
 enquanto_para_decimal:				# enquanto *número != '\0' e *número != '\n' faça
 	lb $a0, ($s0)				# 	dígito <- *número
 	beq $a0, '\0', retorno_para_decimal	#
 	beq $a0, '\n', retorno_para_decimal	#
-	mulu $s2, $s2, $s1			# 	decimal *= base
+	multu $s2, $s1				# 	decimal *= base
+	mflo $s2				#
+	mfhi $t0				#
+	bnez $t0, overflow_para_decimal		# 	se parte alta da multiplicação != 0 então retorna overflow = 1
 	la $a1, digitos				#
 	move $a2, $s1				#
 	jal busca				# 	valor <- busca(dígito, dígitos, base)
+	move $t0, $s2				# 	anterior <- decimal
 	addu $s2, $s2, $v0			# 	decimal += valor
+	bltu $s2, $t0, overflow_para_decimal	# 	se decimal < anterior então retorna overflow = 1
 	addi $s0, $s0, 1			#	próximo(número)
 	j enquanto_para_decimal			# fim enquanto
+	
+overflow_para_decimal:
+	li $s3, 1
 
 retorno_para_decimal:
 	move $v0, $s2
+	move $v1, $s3
 
 	# desempilha
-	lw $s0, 12($sp)
-	lw $s1, 8($sp)
-	lw $s2, 4($sp)
+	lw $s0, 16($sp)
+	lw $s1, 12($sp)
+	lw $s2, 8($sp)
+	lw $s3, 4($sp)
 	lw $ra, 0($sp)
-	addi $sp, $sp, 16
+	addi $sp, $sp, 20
 	
 	jr $ra
 
