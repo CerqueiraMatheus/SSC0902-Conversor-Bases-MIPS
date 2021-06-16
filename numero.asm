@@ -21,20 +21,19 @@ valida:
 	sw $s1, 4($sp)
 	sw $ra, 0($sp)
 
-	# salva strings
+	# salva número e base
 	move $s0, $a0
 	move $s1, $a1
-	
 
 	li $v0, 0				# válido <- 0
 						#
 enquanto_valida:				# enquanto *número != '\0' e *número != '\n' faça
-	lb $a2, ($s0)				# 	digito <- *numero
-	beq $a2, '\0', retorno_valida		#
-	beq $a2, '\n', retorno_valida		#
-	la $a0, digitos				# 	se busca(digitos, base, digito) = -1 então
-	move $a1, $s1				# 		// digitos com tamanho = base testa apenas valores da base
-	jal busca				#		retorna -1
+	lb $a0, ($s0)				# 	dígito <- *número
+	beq $a0, '\0', retorno_valida		#
+	beq $a0, '\n', retorno_valida		#
+	la $a1, digitos				#
+	move $a2, $s1				# 	se busca(dígito, dígitos, base) = -1 então
+	jal busca				#		retorna 0
 	beq $v0, -1, falha_valida		# 	fim se
 	li $v0, 1				#	válido <- 1
 	addi $s0, $s0, 1			#	próximo(número)

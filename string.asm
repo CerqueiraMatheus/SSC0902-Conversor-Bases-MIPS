@@ -2,9 +2,9 @@
 
 # Busca por um caracter desejado dentro da string
 # Argumentos:
-#  $a0 - string
-#  $a1 - tamanho
-#  $a2 - desejado
+#  $a0 - desejado
+#  $a1 - string
+#  $a2 - tamanho
 # Retorno:
 #  $v0 - índice ou -1 caso não encontrado
 .globl busca
@@ -16,13 +16,13 @@ busca:
 	li $v0, 0				# índice <- 0
 						#
 enquanto_busca:					# enquanto *string != '\0' e tamanho > 0 faça
-	lb $t0, ($a0)				# 	caracter <- *string
+	lb $t0, ($a1)				# 	caracter <- *string
 	beq $t0, '\0', falha_busca		#
-	blez $a1, falha_busca			#
-	beq $t0, $a2, retorno_busca		# 	se caracter = desejado então retorna índice
-	subi $a1, $a1, 1			# 	tamanho--
+	blez $a2, falha_busca			#
+	beq $t0, $a0, retorno_busca		# 	se caracter = desejado então retorna índice
 	addi $v0, $v0, 1			#	índice++
-	addi $a0, $a0, 1			#	próximo(string)
+	addi $a1, $a1, 1			#	próximo(string)
+	subi $a2, $a2, 1			# 	tamanho--
 	j enquanto_busca			# fim enquanto
 						#
 falha_busca:					#
