@@ -1,3 +1,11 @@
+#	-------------------------------------------------------------------------
+# 	|		    Estudante			|	   NUSP		|
+# 	-------------------------------------------------------------------------
+#	|	Gustavo Henrique Brunelli		|	(11801053)	|
+# 	|	Mateus Israel Silva			|	(11735042)	|
+# 	|	Matheus Henrique de Cerqueira Pinto	|	(11911104)	|
+# 	|	Pedro Lucas de Moliner de Castro 	|	(11795784)	|
+#	-------------------------------------------------------------------------
 .data
 .align 0
 	numero: .space 35
@@ -13,44 +21,44 @@
 
 # Registradores:
 #  $s0 - base da entrada
-#  $s1 - base da saída
+#  $s1 - base da saÃ­da
 #  $s2 - convertido
 .globl main
 main:
 	la $a0, msg_base_entrada		#
 	jal imprime_string			# imprime_string(mensagem base da entrada)
-	jal le_opcao				# opção <- le_opcao()
+	jal le_opcao				# opÃ§Ã£o <- le_opcao()
 	move $a0, $v0				#
-	jal para_base				# base da entrada <- para_base(opção)
+	jal para_base				# base da entrada <- para_base(opÃ§Ã£o)
 	move $s0, $v0				#
 	
 	la $a0, msg_numero			#
-	jal imprime_string			# imprime_string(mensagem número)
+	jal imprime_string			# imprime_string(mensagem nÃºmero)
 	li $v0, 8				#
 	la $a0, numero				#
 	li $a1, 35				#
-	syscall					# número <- entrada()
+	syscall					# nÃºmero <- entrada()
 	
 	la $a0, msg_base_saida			#
-	jal imprime_string			# imprime_string(mensagem base da saída)
-	jal le_opcao				# opção <- le_opcao()
+	jal imprime_string			# imprime_string(mensagem base da saÃ­da)
+	jal le_opcao				# opÃ§Ã£o <- le_opcao()
 	move $a0, $v0				#
-	jal para_base				# base da saída <- para_base(opção)
+	jal para_base				# base da saÃ­da <- para_base(opÃ§Ã£o)
 	move $s1, $v0				#
 	
 	la $a0, numero				#
-	jal maiusculo				# maiusculo(número)
+	jal maiusculo				# maiusculo(nÃºmero)
 	la $a0, numero				#
 	move $a1, $s0				#
-	jal valida				# válido <- valida(número, base da entrada)
-	beqz $v0, numero_invalido		# se válido = 0 então imprime_string(mensagem número inválido) senão
+	jal valida				# vÃ¡lido <- valida(nÃºmero, base da entrada)
+	beqz $v0, numero_invalido		# se vÃ¡lido = 0 entÃ£o imprime_string(mensagem nÃºmero invÃ¡lido) senÃ£o
 	la $a0, numero				#
 	move $a1, $s0				#
-	jal para_decimal			# decimal, overflow <- para_decimal(número, base da entrada)
-	bnez $v1, overflow			# se overflow != 0 então imprime_string(mensagem overflow)
+	jal para_decimal			# decimal, overflow <- para_decimal(nÃºmero, base da entrada)
+	bnez $v1, overflow			# se overflow != 0 entÃ£o imprime_string(mensagem overflow)
 	move $a0, $v0				#
 	move $a1, $s1				#
-	jal decimal_para			# convertido <- decimal_para(decimal, base da saída)
+	jal decimal_para			# convertido <- decimal_para(decimal, base da saÃ­da)
 	move $s2, $v0				#
 	la $a0, msg_convertido			#
 	jal imprime_string			# imprime_string(mensagem convertido)
