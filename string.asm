@@ -1,3 +1,11 @@
+#	-------------------------------------------------------------------------
+# 	|		    Estudante			|	   NUSP		|
+# 	-------------------------------------------------------------------------
+#	|	Gustavo Henrique Brunelli		|	(11801053)	|
+# 	|	Mateus Israel Silva			|	(11735042)	|
+# 	|	Matheus Henrique de Cerqueira Pinto	|	(11911104)	|
+# 	|	Pedro Lucas de Moliner de Castro 	|	(11795784)	|
+#	-------------------------------------------------------------------------
 .text
 
 # Busca por um caracter desejado dentro da string
@@ -6,22 +14,22 @@
 #  $a1 - string
 #  $a2 - tamanho
 # Retorno:
-#  $v0 - Ìndice ou -1 caso n„o encontrado
+#  $v0 - √≠ndice ou -1 caso n√£o encontrado
 .globl busca
 busca:
 	# empilha
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	
-	li $v0, 0				# Ìndice <- 0
+	li $v0, 0				# √≠ndice <- 0
 						#
-enquanto_busca:					# enquanto *string != '\0' e tamanho > 0 faÁa
+enquanto_busca:					# enquanto *string != '\0' e tamanho > 0 fa√ßa
 	lb $t0, ($a1)				# 	caracter <- *string
 	beq $t0, '\0', falha_busca		#
 	blez $a2, falha_busca			#
-	beq $t0, $a0, retorno_busca		# 	se caracter = desejado ent„o retorna Ìndice
-	addi $v0, $v0, 1			#	Ìndice++
-	addi $a1, $a1, 1			#	prÛximo(string)
+	beq $t0, $a0, retorno_busca		# 	se caracter = desejado ent√£o retorna √≠ndice
+	addi $v0, $v0, 1			#	√≠ndice++
+	addi $a1, $a1, 1			#	pr√≥ximo(string)
 	subi $a2, $a2, 1			# 	tamanho--
 	j enquanto_busca			# fim enquanto
 						#
@@ -36,7 +44,7 @@ retorno_busca:
 	jr $ra
 
 
-# Converte a string para mai˙sculo
+# Converte a string para mai√∫sculo
 # Argumentos:
 #  $a0 - string
 .globl maiusculo
@@ -45,16 +53,16 @@ maiusculo:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	
-enquanto_maiusculo:				# enquanto *string != '\0' faÁa
+enquanto_maiusculo:				# enquanto *string != '\0' fa√ßa
 	lb $t0, ($a0)				# 	caracter <- *string
 	beq $t0, '\0', returno_maiusculo	#
-	blt $t0, 'a', continua_maiusculo	# 	se 'a' <= caracter <= 'z' ent„o
+	blt $t0, 'a', continua_maiusculo	# 	se 'a' <= caracter <= 'z' ent√£o
 	bgt $t0, 'z', continua_maiusculo	#
 	subi $t0, $t0, 32			#		caracter -= 32
 	sb $t0, ($a0)				#		*string <- caracter
 						#	fim se
 continua_maiusculo:				#
-	addi $a0, $a0, 1			# 	prÛximo(string)
+	addi $a0, $a0, 1			# 	pr√≥ximo(string)
 	j enquanto_maiusculo			# fim enquanto
 
 returno_maiusculo:
@@ -75,18 +83,18 @@ inverte:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	
-	li $t0, 0				# inÌcio <- 0
+	li $t0, 0				# in√≠cio <- 0
 	subi $t1, $a1, 1			# fim <- tamanho - 1
 						#
-enquanto_inverte:				# enquanto inÌcio < fim faÁa
+enquanto_inverte:				# enquanto in√≠cio < fim fa√ßa
 	bge $t0, $t1, retorno_inverte		#
 	add $t2, $a0, $t0			#
 	add $t3, $a0, $t1			#
 	lb $t4, ($t2)				#
 	lb $t5, ($t3)				#
-	sb $t5, ($t2)				# 	string[inÌcio] <- string[fim]
-	sb $t4, ($t3)				# 	string[fim] <- string[inÌcio]
-	addi $t0, $t0, 1			# 	inÌcio++
+	sb $t5, ($t2)				# 	string[in√≠cio] <- string[fim]
+	sb $t4, ($t3)				# 	string[fim] <- string[in√≠cio]
+	addi $t0, $t0, 1			# 	in√≠cio++
 	subi $t1, $t1, 1			# 	fim--
 	j enquanto_inverte			# fim enquanto
 	
