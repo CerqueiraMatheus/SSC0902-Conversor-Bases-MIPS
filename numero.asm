@@ -1,3 +1,11 @@
+#	-------------------------------------------------------------------------
+# 	|		    Estudante			|	   NUSP		|
+# 	-------------------------------------------------------------------------
+#	|	Gustavo Henrique Brunelli		|	(11801053)	|
+# 	|	Mateus Israel Silva			|	(11735042)	|
+# 	|	Matheus Henrique de Cerqueira Pinto	|	(11911104)	|
+# 	|	Pedro Lucas de Moliner de Castro 	|	(11795784)	|
+#	-------------------------------------------------------------------------
 .data
 .align 0
 	convertido: .space 33
@@ -5,14 +13,14 @@
 
 .text
 
-# Checa se o número é válido
+# Checa se o nÃºmero Ã© vÃ¡lido
 # Argumentos:
-#  $a0 - número
+#  $a0 - nÃºmero
 #  $a1 - base
 # Retorno:
-#  $v0 - 1 se válido ou 0 se inválido
+#  $v0 - 1 se vÃ¡lido ou 0 se invÃ¡lido
 # Registradores:
-#  $s0 - número
+#  $s0 - nÃºmero
 #  $s1 - base
 .globl valida
 valida:
@@ -22,22 +30,22 @@ valida:
 	sw $s1, 4($sp)
 	sw $ra, 0($sp)
 
-	# salva número e base
+	# salva nÃºmero e base
 	move $s0, $a0
 	move $s1, $a1
 
-	li $v0, 0				# válido <- 0
+	li $v0, 0				# vÃ¡lido <- 0
 						#
-enquanto_valida:				# enquanto *número != '\0' e *número != '\n' faça
-	lb $a0, ($s0)				# 	dígito <- *número
+enquanto_valida:				# enquanto *nÃºmero != '\0' e *nÃºmero != '\n' faÃ§a
+	lb $a0, ($s0)				# 	dÃ­gito <- *nÃºmero
 	beq $a0, '\0', retorno_valida		#
 	beq $a0, '\n', retorno_valida		#
 	la $a1, digitos				#
-	move $a2, $s1				# 	se busca(dígito, dígitos, base) = -1 então
+	move $a2, $s1				# 	se busca(dÃ­gito, dÃ­gitos, base) = -1 entÃ£o
 	jal busca				#		retorna 0
 	beq $v0, -1, falha_valida		# 	fim se
-	li $v0, 1				#	válido <- 1
-	addi $s0, $s0, 1			#	próximo(número)
+	li $v0, 1				#	vÃ¡lido <- 1
+	addi $s0, $s0, 1			#	prÃ³ximo(nÃºmero)
 	j enquanto_valida			# fim enquanto
 
 falha_valida:
@@ -53,15 +61,15 @@ retorno_valida:
 	jr $ra
 
 
-# Converte um número para decimal
+# Converte um nÃºmero para decimal
 # Argumentos:
-#  $a0 - número
+#  $a0 - nÃºmero
 #  $a1 - base
 # Retorno:
 #  $v0 - decimal
-#  $v1 - 1 se houve overflow e 0 se não
+#  $v1 - 1 se houve overflow e 0 se nÃ£o
 # Registradores:
-#  $s0 - número
+#  $s0 - nÃºmero
 #  $s1 - base
 #  $s2 - decimal
 #  $s3 - overflow
@@ -75,28 +83,28 @@ para_decimal:
 	sw $s3, 4($sp)
 	sw $ra, 0($sp)
 	
-	# salva número e base
+	# salva nÃºmero e base
 	move $s0, $a0
 	move $s1, $a1
 	
 	li $s2, 0				# decimal <- 0
 	li $s3, 0				# overflow <- 0
 						#
-enquanto_para_decimal:				# enquanto *número != '\0' e *número != '\n' faça
-	lb $a0, ($s0)				# 	dígito <- *número
+enquanto_para_decimal:				# enquanto *nÃºmero != '\0' e *nÃºmero != '\n' faÃ§a
+	lb $a0, ($s0)				# 	dÃ­gito <- *nÃºmero
 	beq $a0, '\0', retorno_para_decimal	#
 	beq $a0, '\n', retorno_para_decimal	#
 	multu $s2, $s1				# 	decimal *= base
 	mflo $s2				#
 	mfhi $t0				#
-	bnez $t0, overflow_para_decimal		# 	se parte alta da multiplicação != 0 então retorna overflow = 1
+	bnez $t0, overflow_para_decimal		# 	se parte alta da multiplicaÃ§Ã£o != 0 entÃ£o retorna overflow = 1
 	la $a1, digitos				#
 	move $a2, $s1				#
-	jal busca				# 	valor <- busca(dígito, dígitos, base)
+	jal busca				# 	valor <- busca(dÃ­gito, dÃ­gitos, base)
 	move $t0, $s2				# 	anterior <- decimal
 	addu $s2, $s2, $v0			# 	decimal += valor
-	bltu $s2, $t0, overflow_para_decimal	# 	se decimal < anterior então retorna overflow = 1
-	addi $s0, $s0, 1			#	próximo(número)
+	bltu $s2, $t0, overflow_para_decimal	# 	se decimal < anterior entÃ£o retorna overflow = 1
+	addi $s0, $s0, 1			#	prÃ³ximo(nÃºmero)
 	j enquanto_para_decimal			# fim enquanto
 	
 overflow_para_decimal:
@@ -129,16 +137,16 @@ decimal_para:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	
-	beqz $a0, zero_decimal_para		# se decimal = 0 então retorna "0"
+	beqz $a0, zero_decimal_para		# se decimal = 0 entÃ£o retorna "0"
 	li $t0, 0				# tamanho <- 0
 						#
-enquanto_decimal_para:				# enquanto decimal != 0 faça
+enquanto_decimal_para:				# enquanto decimal != 0 faÃ§a
 	beqz $a0, inverte_decimal_para		#
 	divu $a0, $a1				#
 	mflo $a0				# 	decimal <- decimal / base
-	mfhi $t1				# 	índice <- decimal % base
-	lb $t1, digitos($t1)			# 	dígito <- dígitos[índice]
-	sb $t1, convertido($t0)			# 	convertido[tamanho] <- dígito
+	mfhi $t1				# 	Ã­ndice <- decimal % base
+	lb $t1, digitos($t1)			# 	dÃ­gito <- dÃ­gitos[Ã­ndice]
+	sb $t1, convertido($t0)			# 	convertido[tamanho] <- dÃ­gito
 	addi $t0, $t0, 1			# 	tamanho++
 	j enquanto_decimal_para			# fim enquanto
 						#
