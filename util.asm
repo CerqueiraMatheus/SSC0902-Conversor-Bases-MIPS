@@ -1,3 +1,11 @@
+#	-------------------------------------------------------------------------
+# 	|		    Estudante			|	   NUSP		|
+# 	-------------------------------------------------------------------------
+#	|	Gustavo Henrique Brunelli		|	(11801053)	|
+# 	|	Mateus Israel Silva			|	(11735042)	|
+# 	|	Matheus Henrique de Cerqueira Pinto	|	(11911104)	|
+# 	|	Pedro Lucas de Moliner de Castro 	|	(11795784)	|
+#	-------------------------------------------------------------------------
 .data
 .align 0
 	opcoes: .asciiz "[B] Binario\n[D] Decimal\n[H] Hexadecimal\n"
@@ -24,9 +32,9 @@ imprime_string:
 	jr $ra
 
 
-# Lê uma opção válida
+# LÃª uma opÃ§Ã£o vÃ¡lida
 # Retorno:
-#  $v0 - opção
+#  $v0 - opÃ§Ã£o
 .globl le_opcao
 le_opcao:
 	# empilha
@@ -34,16 +42,16 @@ le_opcao:
 	sw $ra, 0($sp)
 	
 	la $a0, opcoes				#
-	jal imprime_string			# imrpime_string(opções)
+	jal imprime_string			# imrpime_string(opÃ§Ãµes)
 						#
 repita_le_opcao:				# repita
 	li $v0, 12				#
 	syscall					# 	caracter <- entrada()
-	beq $v0, 'B', retorno_le_opcao		# 	se caracter = 'B' ou caracter = 'D' ou caracter = 'H' então
+	beq $v0, 'B', retorno_le_opcao		# 	se caracter = 'B' ou caracter = 'D' ou caracter = 'H' entÃ£o
 	beq $v0, 'D', retorno_le_opcao		# 		retorna caracter
 	beq $v0, 'H', retorno_le_opcao		# 	fim se
 	la $a0, opcao_invalida			#
-	jal imprime_string			# 	imprime_string(opção inválida)
+	jal imprime_string			# 	imprime_string(opÃ§Ã£o invÃ¡lida)
 	j repita_le_opcao			# fim repita
 
 retorno_le_opcao:
@@ -61,9 +69,9 @@ retorno_le_opcao:
 	jr $ra
 
 
-# Converte a opção para base
+# Converte a opÃ§Ã£o para base
 # Argumentos:
-#  $a0 - opção
+#  $a0 - opÃ§Ã£o
 # Retorno:
 #  $v0 - base
 .globl para_base
@@ -72,17 +80,17 @@ para_base:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 
-binario_para_base:				# se opção = 'B' então
+binario_para_base:				# se opÃ§Ã£o = 'B' entÃ£o
 	bne $a0, 'B', decimal_para_base		#
 	li $v0, 2				# 	retorna 2
 	j retorno_para_base			#
 						#
-decimal_para_base:				# senão se opção = 'D' então
+decimal_para_base:				# senÃ£o se opÃ§Ã£o = 'D' entÃ£o
 	bne $a0, 'D', hexadecimal_para_base	#
 	li $v0, 10				# 	retorna 10
 	j retorno_para_base			#
 						#
-hexadecimal_para_base:				# senão
+hexadecimal_para_base:				# senÃ£o
 	li $v0, 16				# 	retorna 16
 						# fim se
 retorno_para_base:
